@@ -16,5 +16,6 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+apidoc
 
 .byebug_history

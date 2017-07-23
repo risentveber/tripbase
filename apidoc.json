@@ -1,0 +1,11 @@
+{
+  "name": "Runbase API",
+  "version": "0.1.0",
+  "description": "Runbase site public API",
+  "title": "Runbase API",
+  "url" : "http://runbase.risentveber.ru/api",
+  "template" : {
+    "withCompare" : false,
+    "forceLanguage": "en"
+  }
+}
