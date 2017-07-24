@@ -17,5 +17,7 @@
 !/log/.keep
 !/tmp/.keep
 apidoc
+config/secrets.yml
+config/database.yml
 
 .byebug_history

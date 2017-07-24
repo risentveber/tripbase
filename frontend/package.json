@@ -1,0 +1,18 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "inferno": "^3.7.0",
+    "inferno-component": "^3.7.0"
+  },
+  "devDependencies": {
+    "inferno-scripts": "4.1.0"
+  },
+  "scripts": {
+    "start": "inferno-scripts start",
+    "build": "inferno-scripts build",
+    "test": "inferno-scripts test --env=jsdom",
+    "eject": "inferno-scripts eject"
+  }
+}
