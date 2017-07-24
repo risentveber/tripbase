@@ -1,24 +1,21 @@
-# Load DSL and set up stages
 require "capistrano/setup"
-
-# Include default deployment tasks
 require "capistrano/deploy"
-
-# Load the SCM plugin appropriate to your project:
-#
-# require "capistrano/scm/hg"
-# install_plugin Capistrano::SCM::Hg
-# or
-# require "capistrano/scm/svn"
-# install_plugin Capistrano::SCM::Svn
-# or
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
 
-require 'capistrano/rails'
 require 'capistrano/rbenv'
 require 'capistrano/bundler'
 require 'capistrano/rails/migrations'
 
-# Load custom tasks from `lib/capistrano/tasks` if you have any defined
-Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
+namespace :deploy do
+  desc 'Install node modules'
+  task :build_frontend do
+    on roles(:app) do
+      execute "cd #{release_path}/frontend/; PATH=/root/.nvm/versions/node/v#{fetch(:node_version)}/bin:#{shared_path}/bin:$PATH NODE_ENV=#{fetch(:rails_env)} NVM_DIR=/root/.nvm npm i"
+      execute "cd #{release_path}/frontend/; PATH=/root/.nvm/versions/node/v#{fetch(:node_version)}/bin:#{shared_path}/bin:$PATH NODE_ENV=#{fetch(:rails_env)} NVM_DIR=/root/.nvm PUBLIC_URL=http://runbase.risentveber.ru npm run build"
+    end
+  end
+
+
+  after :updated, :build_frontend
+end
