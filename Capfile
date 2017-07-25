@@ -5,7 +5,9 @@ install_plugin Capistrano::SCM::Git
 
 require 'capistrano/rbenv'
 require 'capistrano/bundler'
+require 'capistrano/puma'
 require 'capistrano/rails/migrations'
+install_plugin Capistrano::Puma
 
 namespace :deploy do
   desc 'Install node modules'
