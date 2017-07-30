@@ -1,5 +1,5 @@
 class Api::SessionsController < ApplicationController
-  skip_before_action :authorize, only: :create
+  skip_before_action :authentificate, only: :create
   before_action :find_session, except: :create
 
 =begin
@@ -14,6 +14,9 @@ class Api::SessionsController < ApplicationController
 =end
   def create
     @session = Session.new(session_params)
+    ap @session
+    ap params.inspect
+    ap request.body
     if @session.save
       render json: @session
     else
@@ -52,8 +55,8 @@ class Api::SessionsController < ApplicationController
   protected
 
   def session_params
-    # result = params[:session]
-    params.permit(:email, :password)# if result
+    result = params[:session]
+    result.permit(:email, :password) if result
   end
 
   def find_session

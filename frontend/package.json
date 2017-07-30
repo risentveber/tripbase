@@ -6,7 +6,7 @@
   "scripts": {
     "test": "",
     "start": "node server",
-    "build": "rm -rf build && webpack --config ./webpack.production.config.js --progress --profile --colors",
+    "build": "rm -rf build && webpack --config ./webpack.production.config.js --profile --colors",
     "eslint": "eslint ."
   },
   "keywords": [

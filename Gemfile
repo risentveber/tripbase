@@ -13,6 +13,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'validates_email_format_of'
 gem 'active_model_serializers'
+gem 'pundit'
 
 group :development, :test do
   gem 'rspec-rails'
