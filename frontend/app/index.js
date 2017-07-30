@@ -5,6 +5,7 @@ import { configureStore, history } from './store/configureStore';
 import Root from './containers/Root';
 import 'fetch-polyfill';
 const store = configureStore();
+import './images/favicon.ico';
 
 render(
     <AppContainer>
