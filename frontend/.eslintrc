@@ -9,6 +9,7 @@
     "fetch": true,
     "expect": true,
     "sinon": true,
+    "Promise": true,
     "__DEV__": true
   },
   "ecmaFeatures": {

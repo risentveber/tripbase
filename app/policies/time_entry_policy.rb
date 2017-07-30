@@ -6,7 +6,23 @@ class TimeEntryPolicy
     @time_entry = time_entry
   end
 
+  def index?
+    true
+  end
+
+  def show?
+    user.admin? or user.manager? or user.id == time_entry.user.id
+  end
+
+  def create?
+    true
+  end
+
   def update?
-    user.admin?
+    user.admin? or user.id == time_entry.user.id
+  end
+
+  def destroy?
+    user.admin? or user.id == time_entry.user.id
   end
 end

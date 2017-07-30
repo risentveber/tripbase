@@ -14,9 +14,6 @@ class Api::SessionsController < ApplicationController
 =end
   def create
     @session = Session.new(session_params)
-    ap @session
-    ap params.inspect
-    ap request.body
     if @session.save
       render json: @session
     else

@@ -1,6 +1,8 @@
 import {
     LOGIN_ATTRIBUTE_CHANGE,
-    LOGIN_SUBMIT
+    LOGIN_AUTHENTIFICATED,
+    LOGIN_SUBMIT,
+    LOGIN_FAILED
 } from '../actions/login';
 
 const defaultLoginState = () => ({
@@ -21,6 +23,20 @@ export default (state = defaultLoginState(), action) => {
             return {
                 ...state,
                 processing: true
+            };
+        case LOGIN_FAILED:
+            return {
+                ...state,
+                errors: action.errors,
+                processing: false
+            };
+        case LOGIN_AUTHENTIFICATED:
+            return {
+                ...state,
+                processing: false,
+                email: '',
+                errors: {},
+                password: ''
             };
         default:
             return state;

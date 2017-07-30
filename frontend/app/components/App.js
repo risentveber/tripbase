@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List, ListItem } from 'material-ui/List';
-import ContentDrafts from 'material-ui/svg-icons/content/drafts';
 import ContentSend from 'material-ui/svg-icons/content/send';
 import Subheader from 'material-ui/Subheader';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -12,6 +11,7 @@ import Routes from '../routes';
 import '../styles/App.less';
 import { connect } from 'react-redux';
 import { toggl } from '../actions/laoyut';
+import { Link } from 'react-router-dom';
 
 @connect(
     ({ layout }) => ({
@@ -41,9 +41,16 @@ export default class App extends Component {
                         open={this.props.open}
                     >
                         <List>
-                            <Subheader>Nested List Items</Subheader>
-                            <ListItem primaryText='Sent mail' leftIcon={<ContentSend />} />
-                            <ListItem primaryText='Drafts' leftIcon={<ContentDrafts />} />
+                            <Subheader>Menu</Subheader>
+                            <Link to='/login/'>
+                                <ListItem primaryText='Login' leftIcon={<ContentSend />} />
+                            </Link>
+                            <Link to='/signup/'>
+                                <ListItem primaryText='Sign up' leftIcon={<ContentSend />} />
+                            </Link>
+                            <Link to='/profile/'>
+                                <ListItem primaryText='Profile' leftIcon={<ContentSend />} />
+                            </Link>
                         </List>
                     </Drawer>
                     <div className={classnames('app-content', { 'expanded': this.props.open })}>

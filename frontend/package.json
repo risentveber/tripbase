@@ -17,6 +17,7 @@
   "author": "Jean-Pierre Sierens",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.5.0",
     "classnames": "^2.2.5",
     "fetch-polyfill": "^0.8.2",
     "file-loader": "^0.9.0",
@@ -28,7 +29,8 @@
     "react-redux": "^4.4.5",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "next",
-    "redux": "^3.5.2"
+    "redux": "^3.5.2",
+    "smart-mixin": "^2.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",

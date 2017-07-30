@@ -3,7 +3,7 @@ class ErrorsSerializer < ActiveModel::Serializer
 
   def errors
     object.errors.map do |k,v|
-      { k => v }
+      { k => v.capitalize }
     end.reduce(:merge)
   end
 end

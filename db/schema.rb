@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20170724171815) do
 
-  create_table "sessions", force: :cascade do |t|
+  create_table "session", force: :cascade do |t|
     t.string "session_hash"
     t.integer "user_id"
     t.datetime "expires_at"

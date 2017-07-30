@@ -7,6 +7,8 @@ import 'fetch-polyfill';
 const store = configureStore();
 import './images/favicon.ico';
 
+
+Promise.resolve().then(() => getSessionHash())
 render(
     <AppContainer>
         <Root store={store} history={history} />

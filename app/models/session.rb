@@ -20,7 +20,9 @@ class Session < ApplicationRecord
   def auth_correctly
     user = User.find_by_email(email)
     # If the user exists AND the password entered is correct.
-    unless user && user.authenticate(password)
+    if user && user.authenticate(password)
+      self.user_id = user.id
+    else
       errors.add(:email, 'Wrong email or password')
     end
   end
