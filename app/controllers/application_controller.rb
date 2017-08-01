@@ -4,8 +4,8 @@ class ApplicationController < ActionController::API
 
   def current_user
     @current_user ||= User.includes(:sessions)
-      .where(session: {session_hash: get_session_hash })
-      .where("session.expires_at < ? OR session.expires_at IS NULL", Date.new)
+      .where(sessions: {session_hash: get_session_hash })
+      .where("sessions.expires_at < ? OR sessions.expires_at IS NULL", Date.today)
       .first
   end
 

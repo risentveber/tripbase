@@ -2,6 +2,7 @@ export const LOGIN_ATTRIBUTE_CHANGE = 'LOGIN_ATTRIBUTE_CHANGE';
 export const LOGIN_SUBMIT = 'LOGIN_SUBMIT';
 export const LOGIN_AUTHENTIFICATED = 'LOGIN_AUTHENTIFICATED';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
+export const LOGOUT = 'LOGOUT';
 
 export function changeAttribute(attribute, value) {
     return {
@@ -28,5 +29,11 @@ export function athentificated(user) {
     return {
         type: LOGIN_AUTHENTIFICATED,
         user
+    };
+}
+
+export function logout() {
+    return {
+        type: LOGOUT
     };
 }

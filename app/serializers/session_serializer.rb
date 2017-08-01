@@ -1,3 +1,3 @@
 class SessionSerializer < ActiveModel::Serializer
-  attributes :session_hash, :expires_at
+  attributes :user_id, :expires_at
 end

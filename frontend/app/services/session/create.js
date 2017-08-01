@@ -1,3 +1,5 @@
+import { setSessionHash } from '../sessionHash';
+
 export default ({ email, password }) => fetch('/api/session/', {
     method: 'POST',
     headers: {
@@ -9,6 +11,6 @@ export default ({ email, password }) => fetch('/api/session/', {
     if (data.errors) {
         throw data.errors;
     }
-
+    setSessionHash(data.session_hash);
     return data;
 });

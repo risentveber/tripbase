@@ -1,30 +1,50 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { List, ListItem } from 'material-ui/List';
-import ContentInbox from 'material-ui/svg-icons/content/inbox';
-import ActionGrade from 'material-ui/svg-icons/action/grade';
+
 import ContentSend from 'material-ui/svg-icons/content/send';
-import ContentDrafts from 'material-ui/svg-icons/content/drafts';
-import Divider from 'material-ui/Divider';
-import ActionInfo from 'material-ui/svg-icons/action/info';
-import { Drawer } from 'material-ui';
+import { Subheader } from 'material-ui';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logout } from '../actions/login';
+import { push } from 'react-router-redux';
+import destroy from '../services/session/destroy';
 
-const Menu = () => (
-    <Drawer overlayStyle={{ margin: 5, background: 'red' }}>
-        <List>
-            <ListItem primaryText='Inbox' leftIcon={<ContentInbox />} />
-            <ListItem primaryText='Starred' leftIcon={<ActionGrade />} />
-            <ListItem primaryText='Sent mail' leftIcon={<ContentSend />} />
-            <ListItem primaryText='Drafts' leftIcon={<ContentDrafts />} />
-            <ListItem primaryText='Inbox' leftIcon={<ContentInbox />} />
-        </List>
-        <Divider />
-        <List>
-            <ListItem primaryText='All mail' rightIcon={<ActionInfo />} />
-            <ListItem primaryText='Trash' rightIcon={<ActionInfo />} />
-            <ListItem primaryText='Spam' rightIcon={<ActionInfo />} />
-            <ListItem primaryText='Follow up' rightIcon={<ActionInfo />} />
-        </List>
-    </Drawer>
-);
+@connect(
+    ({ currentUser: { authentificated } }) => ({ authentificated }),
+    dispatch => ({
+        onLogoutClick: () =>
+            destroy().then(
+                () => dispatch(logout()) && dispatch(push('/login/'))
+            )
+    })
+)
+export default class Menu extends Component {
+    static propTypes = {
+        authentificated: PropTypes.bool,
+        onLogoutClick: PropTypes.func
+    };
 
-export default Menu;
+    render() {
+        const { authentificated } = this.props;
+
+        return <List>
+            <Subheader>Menu</Subheader>
+            {!authentificated && <Link to='/login/'>
+                <ListItem primaryText='Login' leftIcon={<ContentSend />} />
+            </Link>
+            }
+            {!authentificated && <Link to='/signup/'>
+                <ListItem primaryText='Sign up' leftIcon={<ContentSend />} />
+            </Link>}
+            {authentificated && <Link to='/profile/'>
+                <ListItem primaryText='Profile' leftIcon={<ContentSend />} />
+            </Link>}
+            {authentificated && <ListItem
+                primaryText='Logout'
+                onClick={this.props.onLogoutClick}
+                leftIcon={<ContentSend />}
+            />}
+        </List>;
+    }
+}

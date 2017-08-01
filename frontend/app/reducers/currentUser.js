@@ -1,7 +1,7 @@
 import {
     CURRENT_USER_ATTRIBUTE_CHANGE
 } from '../actions/currentUser';
-import { LOGIN_AUTHENTIFICATED } from '../actions/login';
+import { LOGIN_AUTHENTIFICATED, LOGOUT } from '../actions/login';
 
 const defaultLayoutState = () => ({
     authentificated: false,
@@ -23,8 +23,12 @@ export default (state = defaultLayoutState(), action) => {
         case LOGIN_AUTHENTIFICATED:
             return {
                 ...state,
+                email: action.user.email || state.email,
+                name: action.user.name || state.name,
                 authentificated: true
             };
+        case LOGOUT:
+            return defaultLayoutState();
         default:
             return state;
     }

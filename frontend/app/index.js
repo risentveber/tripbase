@@ -6,15 +6,19 @@ import Root from './containers/Root';
 import 'fetch-polyfill';
 const store = configureStore();
 import './images/favicon.ico';
+import showUser from './services/users/show';
+import showSession from './services/session/show';
+import { athentificated } from './actions/login';
 
 
-Promise.resolve().then(() => getSessionHash())
-render(
-    <AppContainer>
-        <Root store={store} history={history} />
-    </AppContainer>,
-    document.getElementById('root')
-);
+showSession().then(({ user_id }) => showUser(user_id))
+    .then(user => store.dispatch(athentificated(user)), err => console.error(err)) // eslint-disable-line
+    .then(() => render(
+        <AppContainer>
+            <Root store={store} history={history} />
+        </AppContainer>,
+        document.getElementById('root')
+    ));
 
 if (module.hot) {
     module.hot.accept('./containers/Root', () => {

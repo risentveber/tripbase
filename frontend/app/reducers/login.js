@@ -2,7 +2,8 @@ import {
     LOGIN_ATTRIBUTE_CHANGE,
     LOGIN_AUTHENTIFICATED,
     LOGIN_SUBMIT,
-    LOGIN_FAILED
+    LOGIN_FAILED,
+    LOGOUT
 } from '../actions/login';
 
 const defaultLoginState = () => ({
@@ -19,6 +20,8 @@ export default (state = defaultLoginState(), action) => {
                 ...state,
                 [action.attribute]: action.value
             };
+        case LOGOUT:
+            return defaultLoginState();
         case LOGIN_SUBMIT:
             return {
                 ...state,
