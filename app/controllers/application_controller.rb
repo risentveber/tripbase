@@ -9,10 +9,11 @@ class ApplicationController < ActionController::API
       .first
   end
 
+  protected
+
   def authentificate
     render status: :unauthorized unless get_session_hash and current_user
   end
-  protected
 
   def get_session_hash
     request.headers['X-Session-Hash']
