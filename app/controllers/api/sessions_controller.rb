@@ -3,14 +3,16 @@ class Api::SessionsController < ApplicationController
   before_action :find_session, except: :create
 
 =begin
-  @api {post} /session/ Create session from credentails
+  @api {post} /session/ Create session
+  @apiDescription Create session from credentails
   @apiName CreateSession
   @apiGroup Session
-  @apiParam {String} email Email of user to login.
-  @apiParam {String} password  Password of user to login.
+  @apiParam (Request Fields) {Object} session
+  @apiParam (Request Fields) {String} session.password Password of user to login
+  @apiParam (Request Fields) {String} session.email Email of user to login
 
-  @apiSuccess {String} session_hash Hash that make every session uniq.
-  @apiSuccess {String} expires_at Date where session is expired.
+  @apiSuccess {String} session_hash Hash that make every session uniq
+  @apiSuccess {String} expires_at Date where session is expired
 =end
   def create
     @session = Session.new(session_params)
@@ -22,13 +24,14 @@ class Api::SessionsController < ApplicationController
   end
 
 =begin
-  @api {get} /session/ Request current session info
-  @apiHeader {String} X-Session-Hash Hash of current session.
+  @api {get} /session/ Show session
+  @apiDescription Request current session info
+  @apiHeader {String} X-Session-Hash Hash of current session
   @apiName GetSession
   @apiGroup Session
 
-  @apiSuccess {String} session_hash Hash that make every session uniq.
-  @apiSuccess {String} expires_at Date where session is expired.
+  @apiSuccess {String} session_hash Hash that make every session uniq
+  @apiSuccess {Number} user_id Id of user session belongs to
 =end
   def show
     if @session
@@ -39,8 +42,9 @@ class Api::SessionsController < ApplicationController
   end
 
 =begin
-  @api {delete} /session/ Process logout
-  @apiHeader {String} X-Session-Hash Hash of current session.
+  @api {delete} /session/ Destroy session
+  @apiDescription Process logout
+  @apiHeader {String} X-Session-Hash Hash of current session
   @apiName LogoutSession
   @apiGroup Session
 =end

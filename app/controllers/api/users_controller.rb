@@ -7,10 +7,37 @@ class Api::UsersController < ApplicationController
     render json: @users
   end
 
+=begin
+  @api {get} /users/:id/ Show user
+  @apiDescription Show user info
+  @apiName showUser
+  @apiGroup Users
+
+  @apiSuccess {String} name Name of the user
+  @apiSuccess {String} email Email of the user
+  @apiSuccess {String} id Email of the user
+  @apiSuccess {String} role Role of the user (client|admin|manager)
+=end
   def show
     render json: @user
   end
 
+=begin
+  @api {post} /users/ Create user
+  @apiDescription Create user from data
+  @apiName CreateUser
+  @apiGroup Users
+  @apiParam (Request Fields) {Object} user
+  @apiParam (Request Fields) {String} user.password Password of user to create.
+  @apiParam (Request Fields) {String} user.password_confirmation Password confirmation of user to create.
+  @apiParam (Request Fields) {String} user.name Name of user to create.
+  @apiParam (Request Fields) {String} user.email Email of user to create.
+
+  @apiSuccess {String} name Name of the user created
+  @apiSuccess {String} email Email of the user created.
+  @apiSuccess {String} id Email of the user created.
+  @apiSuccess {String} role Role of the user (client|admin|manager)
+=end
   def create
     @user = User.new(user_params)
     if @user.save
@@ -18,9 +45,24 @@ class Api::UsersController < ApplicationController
     else
       render json: ::ErrorsSerializer.new(@user), status: :precondition_failed
     end
-
   end
 
+=begin
+  @api {put|patch} /users/:id/ Update user
+  @apiDescription Update specified user
+  @apiName updateUser
+  @apiGroup Users
+  @apiParam (Request Fields) {Object} user
+  @apiParam (Request Fields) {String} user.password
+  @apiParam (Request Fields) {String} user.password_confirmation
+  @apiParam (Request Fields) {String} user.name Name of user
+  @apiParam (Request Fields) {String} user.email Email of user
+
+  @apiSuccess {String} name Name of the user updated
+  @apiSuccess {String} email Email of the user updated
+  @apiSuccess {String} id Email of the user updated
+  @apiSuccess {String} role Role of the user (client|admin|manager)
+=end
   def update
     if @user.update(user_params)
       render json: @user
@@ -29,6 +71,12 @@ class Api::UsersController < ApplicationController
     end
   end
 
+=begin
+  @api {delete} /users/:id/ Delete user
+  @apiDescription Delete user specified
+  @apiName deleteUser
+  @apiGroup Users
+=end
   def destroy
     @user.destroy
   end

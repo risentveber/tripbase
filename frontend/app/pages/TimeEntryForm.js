@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { RaisedButton, TextField } from 'material-ui';
 import PageContent from '../components/PageContent';
 import { connect } from 'react-redux';
-import { athentificated, changeAttribute, submit, failed } from '../actions/login';
 import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
-import create from '../services/session/create';
-import showUser from '../services/users/show';
+import { changeCurrentUserAttribute, userCreated, userStartCreation } from '../actions/currentUser';
+import createUser from '../services/users/create';
+import createSession from '../services/session/create';
+import { athentificated } from '../actions/login';
+import auth from '../decorators/auth';
 
 const style = {
     marginLeft: 20,
@@ -15,22 +17,23 @@ const style = {
 
 const mapDispatchToProps = dispatch => ({
     onChangeAttribute: event => {
-        dispatch(changeAttribute(event.target.name, event.target.value));
+        dispatch(changeCurrentUserAttribute(event.target.name, event.target.value));
     },
     onSingUpClick: () => dispatch(push('/')),
-    onSubmit: ({ email, password }) => {
-        dispatch(submit());
-        create({ email, password })
-            .then(({ user_id }) => showUser(user_id))
+    onSubmit: ({ name, password, password_confirmation, email }) => {
+        dispatch(userStartCreation());
+        createUser({ name, password, password_confirmation, email })
+            .then(user => dispatch(userCreated(user)))
+            .then(() => createSession({ email, password }))
             .then(user => dispatch(athentificated(user)))
             .then(() => dispatch(push('/profile/')))
-            .catch(errors => dispatch(failed(errors))
-        );
+            .catch(errors => dispatch(changeCurrentUserAttribute('errors', errors)));
     }
 });
 
-const mapStateToProps = ({ login }) => login;
+const mapStateToProps = ({ timeEntry }) => timeEntry;
 
+@auth
 @connect(
     mapStateToProps,
     mapDispatchToProps
@@ -42,12 +45,14 @@ export default class Login extends Component {
         onSubmit: PropTypes.func,
         disabled: PropTypes.bool,
         email: PropTypes.string,
+        name: PropTypes.string,
         password: PropTypes.string,
+        password_confirmation: PropTypes.string,
         errors: PropTypes.object
     };
 
     static contextTypes = {
-        history: PropTypes.object
+        store: PropTypes.object
     };
 
     render() {
@@ -57,17 +62,28 @@ export default class Login extends Component {
             disabled,
             email,
             password,
-            errors
+            errors,
+            name,
+            password_confirmation: passwordConfirmation
         } = this.props;
 
         return <PageContent>
-            <h1>Login</h1>
+            <h1>Welcome</h1>
             <TextField
                 hintText='Email'
                 onChange={onChangeAttribute}
                 name='email'
                 value={email}
                 errorText={errors.email}
+                style={style}
+            />
+            <br/>
+            <TextField
+                hintText='Name'
+                onChange={onChangeAttribute}
+                name='name'
+                value={name}
+                errorText={errors.name}
                 style={style}
             />
             <br/>
@@ -80,15 +96,24 @@ export default class Login extends Component {
                 style={style}
             />
             <br/>
+            <TextField
+                hintText='Password confirmation'
+                onChange={onChangeAttribute}
+                name='password_confirmation'
+                value={passwordConfirmation}
+                errorText={errors.password_confirmation}
+                style={style}
+            />
+            <br/>
             <RaisedButton
-                label='Go!'
+                label='Continue'
                 primary
-                onClick={() => onSubmit({ email, password })}
+                onClick={() => onSubmit(this.props)}
                 disabled={disabled}
             />
-            <Link to='/signup/'>
+            <Link to='/login/'>
                 <RaisedButton
-                    label='Sign up'
+                    label='Login'
                 />
             </Link>
         </PageContent>;
