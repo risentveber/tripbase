@@ -13,7 +13,7 @@ namespace :deploy do
   desc 'Install node modules'
   task 'frontend:install' do
     on roles(:app) do
-      execute "cd #{release_path}/frontend/; PATH=/root/.nvm/versions/node/v#{fetch(:node_version)}/bin:#{shared_path}/bin:$PATH npm i"
+      execute "cd #{release_path}/frontend/; PATH=/root/.nvm/versions/node/v#{fetch(:node_version)}/bin:#{shared_path}/bin:$PATH npm i --silent"
     end
   end
 
