@@ -9,6 +9,21 @@ require 'capistrano/puma'
 require 'capistrano/rails/migrations'
 install_plugin Capistrano::Puma
 
+namespace :rails do
+  desc 'Open a rails console `cap [staging] rails:console [server_index default: 0]`'
+  task :console do
+    on roles(:app) do |server|
+      puts "Opening a console on: #{host}...."
+
+      cmd = "ssh #{server.user}@#{host} -t 'cd #{fetch(:deploy_to)}/current && RAILS_ENV=#{fetch(:rails_env)} bundle exec rails console'"
+
+      puts cmd
+
+      exec cmd
+    end
+  end
+end
+
 namespace :deploy do
   desc 'Install node modules'
   task 'frontend:install' do

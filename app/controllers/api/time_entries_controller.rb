@@ -1,8 +1,18 @@
 class Api::TimeEntriesController < ApplicationController
   before_action :find_time_entry, only: [:show, :update, :destroy]
-
+=begin
+  @api {get} /time_entries/ Time entries list
+  @apiDescription Show list of time entries
+  @apiName timeEtnriesList
+  @apiGroup TimeEntries
+  @apiHeader {String} X-Session-Hash Hash of current session
+  @apiSuccess {Object[]} - Array of time entries
+  @apiSuccess {Number} -.distance Distance in meters
+  @apiSuccess {Number} -.duration Duration in minutes
+  @apiSuccess {String} -.date Date of the jogging time
+=end
   def index
-    @time_entries = TimeEntry.all
+    @time_entries = TimeEntry.where(user_id: current_user.id)
     render json: @time_entries
   end
 
@@ -11,7 +21,7 @@ class Api::TimeEntriesController < ApplicationController
   @apiDescription Show time entry info
   @apiName showTimeEntry
   @apiGroup TimeEntries
-
+  @apiHeader {String} X-Session-Hash Hash of current session
   @apiSuccess {Number} distance Distance in meters
   @apiSuccess {Number} durations Duration in minutes
   @apiSuccess {String} id Id of the record
@@ -26,6 +36,7 @@ class Api::TimeEntriesController < ApplicationController
   @apiDescription Create time entry from data
   @apiName CreateTimeEntry
   @apiGroup TimeEntries
+  @apiHeader {String} X-Session-Hash Hash of current session
   @apiParam (Request Fields) {Object} time_entry
   @apiParam (Request Fields) {Number} time_entry.distance Distance in meters
   @apiParam (Request Fields) {Number} time_entry.duration Duration in minutes
@@ -38,6 +49,7 @@ class Api::TimeEntriesController < ApplicationController
 =end
   def create
     @time_entry = TimeEntry.new(time_entry_params)
+    @time_entry.user_id = current_user.id
     if @time_entry.save
       render json: @time_entry
     else
@@ -50,6 +62,7 @@ class Api::TimeEntriesController < ApplicationController
   @apiDescription Update time entry with id = :id
   @apiName UpdateTimeEntry
   @apiGroup TimeEntries
+  @apiHeader {String} X-Session-Hash Hash of current session
   @apiParam (Request Fields) {Object} time_entry
   @apiParam (Request Fields) {Number} time_entry.distance Distance in meters
   @apiParam (Request Fields) {Number} time_entry.duration Duration in minutes
@@ -69,6 +82,7 @@ class Api::TimeEntriesController < ApplicationController
   @apiDescription Delete time entry
   @apiName deleteTimeEntry
   @apiGroup TimeEntries
+  @apiHeader {String} X-Session-Hash Hash of current session
 =end
   def destroy
 

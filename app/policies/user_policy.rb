@@ -7,7 +7,7 @@ class UserPolicy
   end
 
   def index?
-    true
+    user.admin? or user.manager?
   end
 
   def show?

@@ -75,6 +75,7 @@ export default class Login extends Component {
                 hintText='Password'
                 onChange={onChangeAttribute}
                 name='password'
+                type='password'
                 value={password}
                 errorText={errors.password}
                 style={style}

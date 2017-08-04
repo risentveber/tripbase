@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
     Table,
     TableBody,
@@ -7,43 +8,23 @@ import {
     TableRow,
     TableRowColumn,
 } from 'material-ui/Table';
+import { connect } from 'react-redux';
+import { timeEntriesLoaded } from '../actions/timeEntries';
+import load from '../services/timeEntries/load';
 
-const tableData = [
-    {
-        id: 23,
-        date: '6 of march',
-        distance: 100,
-        time: 10
-    },
-    {
-        id: 44,
-        date: '30 of april',
-        distance: 50,
-        time: 10
-    },
-    {
-        id: 7,
-        date: '2 of june',
-        distance: 100,
-        time: 20
-    },
-    {
-        id: 26,
-        date: '6 of march',
-        distance: 20,
-        time: 4
-    }
-];
-
-/**
- * A more complex example, allowing the table height to be set, and key boolean properties to be toggled.
- */
+@connect(
+    ({ timeEntries: { list } }) => ({ list }),
+    dispatch => ({ onLoaded: list => dispatch(timeEntriesLoaded(list)) })
+)
 export default class TimeEntriesList extends Component {
-    state = {
-        fixedHeader: true,
-        stripedRows: true,
-        height: '300px',
+    static propTypes = {
+        list: PropTypes.array,
+        onLoaded: PropTypes.array
     };
+
+    componentDidMount() {
+        load().then(data => this.props.onLoaded(data));
+    }
 
     handleToggle = (event, toggled) => {
         this.setState({
@@ -59,8 +40,8 @@ export default class TimeEntriesList extends Component {
         return (
             <div>
                 <Table
-                    height={this.state.height}
-                    fixedHeader={this.state.fixedHeader}
+                    height={'300px'}
+                    fixedHeader
                 >
                     <TableHeader displayRowCheckbox={false} displaySelectAll={false}>
                         <TableRow>
@@ -81,13 +62,13 @@ export default class TimeEntriesList extends Component {
                         showRowHover
                         stripedRows
                     >
-                        {tableData.map( (row, index) => (
+                        {this.props.list.map( (row, index) => (
                             <TableRow key={index}>
                                 <TableRowColumn>{row.id}</TableRowColumn>
                                 <TableRowColumn>{row.date}</TableRowColumn>
-                                <TableRowColumn>{row.time}</TableRowColumn>
+                                <TableRowColumn>{row.duration}</TableRowColumn>
                                 <TableRowColumn>{row.distance}</TableRowColumn>
-                                <TableRowColumn>{row.distance / row.time}</TableRowColumn>
+                                <TableRowColumn>{row.distance / row.duration}</TableRowColumn>
                             </TableRow>
                         ))}
                     </TableBody>

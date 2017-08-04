@@ -1,7 +1,18 @@
 class Api::UsersController < ApplicationController
   skip_before_action :authentificate, only: :create
   before_action :find_user, only: [:show, :update, :destroy]
-
+=begin
+  @api {get} /users/:id/ Users list
+  @apiDescription Show list of users
+  @apiName usersList
+  @apiGroup Users
+  @apiHeader {String} X-Session-Hash Hash of current session
+  @apiSuccess {Object[]} - Array of users
+  @apiSuccess {String} -.name Name of the user
+  @apiSuccess {String} -.email Email of the user
+  @apiSuccess {String} -.id Email of the user
+  @apiSuccess {String} -.role Role of the user (client|admin|manager)
+=end
   def index
     @users = User.all
     render json: @users
@@ -12,7 +23,7 @@ class Api::UsersController < ApplicationController
   @apiDescription Show user info
   @apiName showUser
   @apiGroup Users
-
+  @apiHeader {String} X-Session-Hash Hash of current session
   @apiSuccess {String} name Name of the user
   @apiSuccess {String} email Email of the user
   @apiSuccess {String} id Email of the user
@@ -27,6 +38,7 @@ class Api::UsersController < ApplicationController
   @apiDescription Create user from data
   @apiName CreateUser
   @apiGroup Users
+  @apiHeader {String} X-Session-Hash Hash of current session
   @apiParam (Request Fields) {Object} user
   @apiParam (Request Fields) {String} user.password Password of user to create.
   @apiParam (Request Fields) {String} user.password_confirmation Password confirmation of user to create.
@@ -52,6 +64,7 @@ class Api::UsersController < ApplicationController
   @apiDescription Update specified user
   @apiName updateUser
   @apiGroup Users
+  @apiHeader {String} X-Session-Hash Hash of current session
   @apiParam (Request Fields) {Object} user
   @apiParam (Request Fields) {String} user.password
   @apiParam (Request Fields) {String} user.password_confirmation
@@ -76,6 +89,7 @@ class Api::UsersController < ApplicationController
   @apiDescription Delete user specified
   @apiName deleteUser
   @apiGroup Users
+  @apiHeader {String} X-Session-Hash Hash of current session
 =end
   def destroy
     @user.destroy

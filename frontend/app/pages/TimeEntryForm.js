@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { RaisedButton, TextField } from 'material-ui';
+import { DatePicker, RaisedButton, TextField } from 'material-ui';
 import PageContent from '../components/PageContent';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Link } from 'react-router-dom';
-import { changeCurrentUserAttribute, userCreated, userStartCreation } from '../actions/currentUser';
-import createUser from '../services/users/create';
-import createSession from '../services/session/create';
-import { athentificated } from '../actions/login';
+import { timeEntryCreated } from '../actions/timeEntries';
+import createTimeEntry from '../services/timeEntries/create';
 import auth from '../decorators/auth';
+import { timeEntryAttributeChanged } from '../actions/timeEntries';
 
 const style = {
     marginLeft: 20,
@@ -17,21 +15,17 @@ const style = {
 
 const mapDispatchToProps = dispatch => ({
     onChangeAttribute: event => {
-        dispatch(changeCurrentUserAttribute(event.target.name, event.target.value));
+        dispatch(timeEntryAttributeChanged(event.target.name, event.target.value));
     },
-    onSingUpClick: () => dispatch(push('/')),
-    onSubmit: ({ name, password, password_confirmation, email }) => {
-        dispatch(userStartCreation());
-        createUser({ name, password, password_confirmation, email })
-            .then(user => dispatch(userCreated(user)))
-            .then(() => createSession({ email, password }))
-            .then(user => dispatch(athentificated(user)))
-            .then(() => dispatch(push('/profile/')))
-            .catch(errors => dispatch(changeCurrentUserAttribute('errors', errors)));
+    onSubmit: ({ date, distance, duration }) => {
+        createTimeEntry({ date, distance, duration  })
+            .then(timeEntry => dispatch(timeEntryCreated(timeEntry)))
+            .then(() => dispatch(push('/times/')))
+            .catch(errors => dispatch(timeEntryAttributeChanged('errors', errors)));
     }
 });
 
-const mapStateToProps = ({ timeEntry }) => timeEntry;
+const mapStateToProps = ({ timeEntries: { selected } }) => selected;
 
 @auth
 @connect(
@@ -44,10 +38,9 @@ export default class Login extends Component {
         onSingUpClick: PropTypes.func,
         onSubmit: PropTypes.func,
         disabled: PropTypes.bool,
-        email: PropTypes.string,
-        name: PropTypes.string,
-        password: PropTypes.string,
-        password_confirmation: PropTypes.string,
+        date: PropTypes.string,
+        duration: PropTypes.string,
+        distance: PropTypes.string,
         errors: PropTypes.object
     };
 
@@ -60,62 +53,49 @@ export default class Login extends Component {
             onChangeAttribute,
             onSubmit,
             disabled,
-            email,
-            password,
-            errors,
-            name,
-            password_confirmation: passwordConfirmation
+            duration,
+            date,
+            distance,
+            errors
         } = this.props;
 
         return <PageContent>
-            <h1>Welcome</h1>
+            <h1>Create time entry</h1>
+            <DatePicker
+                hintText='Date'
+                onChange={(_, value) => onChangeAttribute(
+                    { target: { name: 'date', value } }
+                )}
+                errorText={errors.date}
+                value={date}
+                style={style}
+            />
             <TextField
-                hintText='Email'
+                hintText='Distance'
                 onChange={onChangeAttribute}
-                name='email'
-                value={email}
-                errorText={errors.email}
+                name='distance'
+                type='number'
+                value={distance}
+                errorText={errors.distance}
                 style={style}
             />
             <br/>
             <TextField
-                hintText='Name'
+                hintText='Duration'
                 onChange={onChangeAttribute}
-                name='name'
-                value={name}
-                errorText={errors.name}
-                style={style}
-            />
-            <br/>
-            <TextField
-                hintText='Password'
-                onChange={onChangeAttribute}
-                name='password'
-                value={password}
-                errorText={errors.password}
-                style={style}
-            />
-            <br/>
-            <TextField
-                hintText='Password confirmation'
-                onChange={onChangeAttribute}
-                name='password_confirmation'
-                value={passwordConfirmation}
-                errorText={errors.password_confirmation}
+                name='duration'
+                type='number'
+                value={duration}
+                errorText={errors.duration}
                 style={style}
             />
             <br/>
             <RaisedButton
-                label='Continue'
+                label='Create'
                 primary
                 onClick={() => onSubmit(this.props)}
                 disabled={disabled}
             />
-            <Link to='/login/'>
-                <RaisedButton
-                    label='Login'
-                />
-            </Link>
         </PageContent>;
     }
 }

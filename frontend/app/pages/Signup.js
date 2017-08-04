@@ -89,6 +89,7 @@ export default class Login extends Component {
                 hintText='Password'
                 onChange={onChangeAttribute}
                 name='password'
+                type='password'
                 value={password}
                 errorText={errors.password}
                 style={style}
@@ -98,6 +99,7 @@ export default class Login extends Component {
                 hintText='Password confirmation'
                 onChange={onChangeAttribute}
                 name='password_confirmation'
+                type='password'
                 value={passwordConfirmation}
                 errorText={errors.password_confirmation}
                 style={style}
