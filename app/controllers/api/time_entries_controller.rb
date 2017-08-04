@@ -12,7 +12,7 @@ class Api::TimeEntriesController < ApplicationController
   @apiSuccess {String} -.date Date of the jogging time
 =end
   def index
-    @time_entries = TimeEntry.where(user_id: current_user.id)
+    @time_entries = policy_scope(TimeEntry)
     render json: @time_entries
   end
 

@@ -58,6 +58,7 @@ export default class Login extends Component {
             distance,
             errors
         } = this.props;
+        console.log(date);
 
         return <PageContent>
             <h1>Create time entry</h1>

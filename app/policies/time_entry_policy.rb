@@ -1,4 +1,20 @@
 class TimeEntryPolicy
+  class Scope < TimeEntryPolicy
+    attr_reader :user, :scope
+
+    def initialize(user, scope)
+      @user  = user
+      @scope = scope
+    end
+
+    def resolve
+      if user.client?
+        @scope.where(user: @user)
+      else
+        @scope.all
+      end
+    end
+  end
   attr_reader :user, :time_entry
 
   def initialize(user, time_entry)
