@@ -1,6 +1,6 @@
 import { getSessionHash } from '../sessionHash';
 
-export default ({ id }) => fetch(`/api/time_entries/${id}/`, {
+export default ({ id }) => fetch(`/api/trips/${id}/`, {
     method: 'DELETE',
     headers: {
         'Accept': 'application/json',

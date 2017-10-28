@@ -3,13 +3,13 @@ import { combineReducers } from 'redux';
 import login from './login';
 import layout from './layout';
 import currentUser from './currentUser';
-import timeEntries from './timeEntries';
+import trips from './trips';
 
 const rootReducer = combineReducers({
     login,
     layout,
     currentUser,
-    timeEntries,
+    trips,
     routing
 });
 

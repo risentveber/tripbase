@@ -10,6 +10,7 @@ const defaultLayoutState = () => ({
     password: '',
     password_confirmation: '',
     session_hash: '',
+    role: 'anonymous',
     errors: {}
 });
 
@@ -25,6 +26,7 @@ export default (state = defaultLayoutState(), action) => {
                 ...state,
                 email: action.user.email || state.email,
                 name: action.user.name || state.name,
+                role: action.user.role || state.role,
                 authentificated: true
             };
         case LOGOUT:

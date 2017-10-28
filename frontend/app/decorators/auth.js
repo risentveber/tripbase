@@ -13,7 +13,7 @@ export default Component => {
         Component.prototype,
         {
             componentWillMount() {
-                if (!this.context.store.getState().currentUser.authentificated) {
+                if (this.context.store.getState().currentUser.role === 'anonymous') {
                     this.context.store.dispatch(push('/login/'));
                 }
             }

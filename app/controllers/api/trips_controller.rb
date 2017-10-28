@@ -4,7 +4,7 @@ class Api::TripsController < ApplicationController
   @api {get} /trips/ Time entries list
   @apiDescription Show list of time entries
   @apiName timeEtnriesList
-  @apiGroup TimeEntries
+  @apiGroup Trips
   @apiHeader {String} X-Session-Hash Hash of current session
   @apiSuccess {Object[]} - Array of time entries
   @apiSuccess {Number} -.distance Distance in meters
@@ -20,7 +20,7 @@ class Api::TripsController < ApplicationController
   @api {get} /trips/:id/ Show time entry
   @apiDescription Show time entry info
   @apiName showTrip
-  @apiGroup TimeEntries
+  @apiGroup Trips
   @apiHeader {String} X-Session-Hash Hash of current session
   @apiSuccess {Number} distance Distance in meters
   @apiSuccess {Number} durations Duration in minutes
@@ -35,7 +35,7 @@ class Api::TripsController < ApplicationController
   @api {post} /trips/ Create time entry
   @apiDescription Create time entry from data
   @apiName CreateTrip
-  @apiGroup TimeEntries
+  @apiGroup Trips
   @apiHeader {String} X-Session-Hash Hash of current session
   @apiParam (Request Fields) {Object} time_entry
   @apiParam (Request Fields) {Number} time_entry.distance Distance in meters
@@ -61,7 +61,7 @@ class Api::TripsController < ApplicationController
   @api {put|patch} /trips/:id/ Update time entry
   @apiDescription Update time entry with id = :id
   @apiName UpdateTrip
-  @apiGroup TimeEntries
+  @apiGroup Trips
   @apiHeader {String} X-Session-Hash Hash of current session
   @apiParam (Request Fields) {Object} time_entry
   @apiParam (Request Fields) {Number} time_entry.distance Distance in meters
@@ -74,18 +74,22 @@ class Api::TripsController < ApplicationController
   @apiSuccess {String} date Date of the jogging time
 =end
   def update
-
+    if @trip.update(trip_params)
+      render json: @trip, status: :created
+    else
+      render json: ::ErrorsSerializer.new(@trip), status: :precondition_failed
+    end
   end
 
 =begin
   @api {delete} /trips/:id/ Delete time entry
   @apiDescription Delete time entry
   @apiName deleteTrip
-  @apiGroup TimeEntries
+  @apiGroup Trips
   @apiHeader {String} X-Session-Hash Hash of current session
 =end
   def destroy
-
+    @trip.destroy
   end
 
   private
@@ -97,6 +101,6 @@ class Api::TripsController < ApplicationController
 
   def trip_params
     result = params[:trip]
-    result.permit(:user_id, :end_date, :start_date, :comment, :destination) if result
+    result.permit(:end_date, :start_date, :comment, :destination) if result
   end
 end

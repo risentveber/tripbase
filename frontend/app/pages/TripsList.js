@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import {
     Table,
     TableBody,
@@ -11,32 +12,32 @@ import {
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import { connect } from 'react-redux';
-import { timeEntriesLoaded, timeEntryDelete, selectTimeEntry } from '../actions/timeEntries';
-import load from '../services/timeEntries/load';
+import { tripsLoaded, tripDelete, selectTrip } from '../actions/trips';
+import load from '../services/trips/load';
 import { push } from 'react-router-redux';
-import destroy from '../services/session/destroy';
+import destroy from '../services/trips/destroy';
 
 @connect(
-    ({ timeEntries: { list } }) => ({ list }),
+    ({ trips: { list } }) => ({ list }),
     dispatch => ({
-        onLoaded: list => dispatch(timeEntriesLoaded(list)),
-        selectTimeEntry: timeEntry => {
-            dispatch(selectTimeEntry(timeEntry));
-            dispatch(push('/times/edit/'));
+        onLoaded: list => dispatch(tripsLoaded(list)),
+        selectTrip: trip => {
+            dispatch(selectTrip(trip));
+            dispatch(push('/trips/edit/'));
         },
-        deleteTimeEntry: timeEntry => {
+        deleteTrip: trip => {
             if (confirm('Are you really want to delete time entry')) { // eslint-disable-line
-                destroy(timeEntry).then(() => dispatch(timeEntryDelete(timeEntry)));
+                destroy(trip).then(() => dispatch(tripDelete(trip)));
             }
         }
     })
 )
-export default class TimeEntriesList extends Component {
+export default class TripsList extends Component {
     static propTypes = {
         list: PropTypes.array,
         onLoaded: PropTypes.func,
-        selectTimeEntry: PropTypes.func,
-        deleteTimeEntry: PropTypes.func
+        selectTrip: PropTypes.func,
+        deleteTrip: PropTypes.func
     };
 
     componentDidMount() {
@@ -62,17 +63,17 @@ export default class TimeEntriesList extends Component {
                 >
                     <TableHeader displayRowCheckbox={false} displaySelectAll={false}>
                         <TableRow>
-                            <TableHeaderColumn colSpan='6' tooltip='Super Header' style={{ textAlign: 'center' }}>
-                                Super Header
+                            <TableHeaderColumn colSpan='6' tooltip='Trips list' style={{ textAlign: 'center' }}>
+                                Trips list
                             </TableHeaderColumn>
                         </TableRow>
                         <TableRow>
                             <TableHeaderColumn>*</TableHeaderColumn>
                             <TableHeaderColumn tooltip='The ID'>ID</TableHeaderColumn>
-                            <TableHeaderColumn tooltip='The Name'>Date</TableHeaderColumn>
-                            <TableHeaderColumn tooltip='The Time'>Time</TableHeaderColumn>
-                            <TableHeaderColumn tooltip='The Distande'>Distance</TableHeaderColumn>
-                            <TableHeaderColumn tooltip='The Speed'>Speed</TableHeaderColumn>
+                            <TableHeaderColumn tooltip='The Start date'>Start date</TableHeaderColumn>
+                            <TableHeaderColumn tooltip='The End date'>End date</TableHeaderColumn>
+                            <TableHeaderColumn tooltip='The Destination'>Destination</TableHeaderColumn>
+                            <TableHeaderColumn tooltip='The Comment'>Comment</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
                     <TableBody
@@ -83,14 +84,22 @@ export default class TimeEntriesList extends Component {
                         {this.props.list.map((row, index) => (
                             <TableRow key={index}>
                                 <TableRowColumn>
-                                    <DeleteIcon onClick={() => this.props.deleteTimeEntry(row)} />
-                                    <EditIcon onClick={() => this.props.selectTimeEntry(row)} />
+                                    <DeleteIcon
+                                        hoverColor='#0a0'
+                                        onClick={() => this.props.deleteTrip(row)}
+                                        style={{ cursor: 'pointer' }}
+                                    />
+                                    <EditIcon
+                                        hoverColor='#0a0'
+                                        onClick={() => this.props.selectTrip(row)}
+                                        style={{ cursor: 'pointer' }}
+                                    />
                                 </TableRowColumn>
                                 <TableRowColumn>{row.id}</TableRowColumn>
-                                <TableRowColumn>{row.date_pretty}</TableRowColumn>
-                                <TableRowColumn>{row.duration}</TableRowColumn>
-                                <TableRowColumn>{row.distance}</TableRowColumn>
-                                <TableRowColumn>{row.distance / row.duration}</TableRowColumn>
+                                <TableRowColumn>{moment(row.start_date).format('MMM Do YY')}</TableRowColumn>
+                                <TableRowColumn>{moment(row.end_date).format('MMM Do YY')}</TableRowColumn>
+                                <TableRowColumn>{row.destination}</TableRowColumn>
+                                <TableRowColumn>{row.comment}</TableRowColumn>
                             </TableRow>
                         ))}
                     </TableBody>

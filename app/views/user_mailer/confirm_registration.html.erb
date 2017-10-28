@@ -2,7 +2,7 @@
 
 <p>
   Your confirmation url is
-  <%= link_to "link", "http://#{Rails.env.production? ? 'tripbase.risentveber.ru' : 'tripbase.dev'}/confirmation/#{@user.confirmation_hash}" %>
+  <%= link_to "link", "http://#{Rails.env.production? ? 'tripbase.risentveber.ru' : 'tripbase.dev'}/confirmations/#{@user.confirmation_hash}/" %>
 </p>
 
 <b>Best regards, Tripbase team.</b>

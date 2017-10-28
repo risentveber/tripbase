@@ -5,10 +5,9 @@ import PageContent from '../components/PageContent';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
-import { changeCurrentUserAttribute, userCreated, userStartCreation } from '../actions/currentUser';
+import { changeCurrentUserAttribute, userStartCreation } from '../actions/currentUser';
 import createUser from '../services/users/create';
-import createSession from '../services/session/create';
-import { athentificated } from '../actions/login';
+
 
 const style = {
     marginLeft: 20,
@@ -22,10 +21,7 @@ const mapDispatchToProps = dispatch => ({
     onSubmit: ({ name, password, password_confirmation, email }) => {
         dispatch(userStartCreation());
         createUser({ name, password, password_confirmation, email })
-            .then(user => dispatch(userCreated(user)))
-            .then(() => createSession({ email, password }))
-            .then(user => dispatch(athentificated(user)))
-            .then(() => dispatch(push('/profile/')))
+            .then(() => dispatch(push('/login/')))
             .catch(errors => dispatch(changeCurrentUserAttribute('errors', errors)));
     }
 });

@@ -16,7 +16,7 @@ import { push } from 'react-router-redux';
 import destroy from '../services/session/destroy';
 
 @connect(
-    ({ currentUser: { authentificated } }) => ({ authentificated }),
+    ({ currentUser: { role } }) => ({ role }),
     dispatch => ({
         onLogoutClick: () =>
             destroy().then(
@@ -26,12 +26,15 @@ import destroy from '../services/session/destroy';
 )
 export default class Menu extends Component {
     static propTypes = {
-        authentificated: PropTypes.bool,
+        role: PropTypes.string,
         onLogoutClick: PropTypes.func
     };
 
     render() {
-        const { authentificated } = this.props;
+        const { role } = this.props;
+        const authentificated = role !== 'anonymous';
+        const isAdmin = role === 'admin';
+        const isManager = role === 'manager';
 
         return <List>
             <Subheader>Menu</Subheader>
@@ -45,10 +48,13 @@ export default class Menu extends Component {
             {authentificated && <Link to='/profile/'>
                 <ListItem primaryText='Profile' leftIcon={<ProfileIcon />} />
             </Link>}
-            {authentificated && <Link to='/times/'>
+            {(isAdmin || isManager) && <Link to='/users/'>
+                <ListItem primaryText='Users' leftIcon={<ListIcon />} />
+            </Link>}
+            {authentificated && <Link to='/trips/'>
                 <ListItem primaryText='Time entries' leftIcon={<ListIcon />} />
             </Link>}
-            {authentificated && <Link to='/times/new/'>
+            {authentificated && <Link to='/trips/new/'>
                 <ListItem primaryText='Add time entry' leftIcon={<AddIcon />} />
             </Link>}
             {authentificated && <ListItem

@@ -8,7 +8,8 @@ import PropTypes from 'prop-types';
 export default class Profile extends Component {
     static propTypes = {
         name: PropTypes.string,
-        email: PropTypes.string
+        email: PropTypes.string,
+        role: PropTypes.string
     };
 
     render() {
@@ -16,6 +17,7 @@ export default class Profile extends Component {
             <h1>Profile</h1>
             <h3>{this.props.email}</h3>
             <h3>{this.props.name}</h3>
+            <h3>{this.props.role}</h3>
         </div>;
     }
 }
