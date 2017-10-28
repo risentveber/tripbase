@@ -1,7 +1,7 @@
-class Api::TimeEntriesController < ApplicationController
-  before_action :find_time_entry, only: [:show, :update, :destroy]
+class Api::TripsController < ApplicationController
+  before_action :find_trip, only: [:show, :update, :destroy]
 =begin
-  @api {get} /time_entries/ Time entries list
+  @api {get} /trips/ Time entries list
   @apiDescription Show list of time entries
   @apiName timeEtnriesList
   @apiGroup TimeEntries
@@ -12,14 +12,14 @@ class Api::TimeEntriesController < ApplicationController
   @apiSuccess {String} -.date Date of the jogging time
 =end
   def index
-    @time_entries = policy_scope(TimeEntry)
-    render json: @time_entries
+    @trips = policy_scope(Trip)
+    render json: @trips
   end
 
 =begin
-  @api {get} /time_entries/:id/ Show time entry
+  @api {get} /trips/:id/ Show time entry
   @apiDescription Show time entry info
-  @apiName showTimeEntry
+  @apiName showTrip
   @apiGroup TimeEntries
   @apiHeader {String} X-Session-Hash Hash of current session
   @apiSuccess {Number} distance Distance in meters
@@ -32,9 +32,9 @@ class Api::TimeEntriesController < ApplicationController
   end
 
 =begin
-  @api {post} /time_entries/ Create time entry
+  @api {post} /trips/ Create time entry
   @apiDescription Create time entry from data
-  @apiName CreateTimeEntry
+  @apiName CreateTrip
   @apiGroup TimeEntries
   @apiHeader {String} X-Session-Hash Hash of current session
   @apiParam (Request Fields) {Object} time_entry
@@ -48,19 +48,19 @@ class Api::TimeEntriesController < ApplicationController
   @apiSuccess {String} date Date of the jogging time
 =end
   def create
-    @time_entry = TimeEntry.new(time_entry_params)
-    @time_entry.user_id = current_user.id
-    if @time_entry.save
-      render json: @time_entry
+    @trip = Trip.new(trip_params)
+    @trip.user_id = current_user.id
+    if @trip.save
+      render json: @trip, status: :created
     else
-      render json: ::ErrorsSerializer.new(@time_entry), status: :precondition_failed
+      render json: ::ErrorsSerializer.new(@trip), status: :precondition_failed
     end
   end
 
 =begin
-  @api {put|patch} /time_entries/:id/ Update time entry
+  @api {put|patch} /trips/:id/ Update time entry
   @apiDescription Update time entry with id = :id
-  @apiName UpdateTimeEntry
+  @apiName UpdateTrip
   @apiGroup TimeEntries
   @apiHeader {String} X-Session-Hash Hash of current session
   @apiParam (Request Fields) {Object} time_entry
@@ -78,9 +78,9 @@ class Api::TimeEntriesController < ApplicationController
   end
 
 =begin
-  @api {delete} /time_entries/:id/ Delete time entry
+  @api {delete} /trips/:id/ Delete time entry
   @apiDescription Delete time entry
-  @apiName deleteTimeEntry
+  @apiName deleteTrip
   @apiGroup TimeEntries
   @apiHeader {String} X-Session-Hash Hash of current session
 =end
@@ -90,13 +90,13 @@ class Api::TimeEntriesController < ApplicationController
 
   private
 
-  def find_user
-    @time_entry = TimeEntry.find(params[:id])
-    authorize @time_entry
+  def find_trip
+    @trip = Trip.find(params[:id])
+    authorize @trip
   end
 
-  def time_entry_params
-    result = params[:time_entry]
-    result.permit(:user_id, :duration, :date, :distance) if result
+  def trip_params
+    result = params[:trip]
+    result.permit(:user_id, :end_date, :start_date, :comment, :destination) if result
   end
 end

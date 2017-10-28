@@ -19,7 +19,7 @@ describe 'Session' do
   it 'Try to create session with wrong cridentails' do
     user = create(:user)
 
-    post '/api/session', params: { email: user.email, password: 'wrong_pass' }
+    post '/api/session', params: { session: { email: user.email, password: 'wrong_pass' } }
 
     body = JSON.parse(response.body)
 
@@ -29,7 +29,7 @@ describe 'Session' do
   it 'Rigth session creation' do
     user = create(:user)
 
-    post '/api/session', params: { email: user.email, password: 'true_pass' }
+    post '/api/session', params: { session: { email: user.email, password: 'true_pass' } }
 
     body = JSON.parse(response.body)
     expect(body['session_hash']).to eq(Session.first.session_hash)

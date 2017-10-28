@@ -23,10 +23,6 @@ class UserPolicy
   end
 
   def destroy?
-    ap user.admin?
-    ap user.manager?
-    ap user.id
-    ap user_record.id
     user.admin? or user.manager? or user.id == user_record.id
   end
 end

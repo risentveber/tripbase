@@ -1,7 +1,7 @@
 # config valid only for current version of Capistrano
 lock "3.8.2"
 
-set :application, "runbase"
+set :application, "tripbase"
 set :rails_env, "production"
 set :node_version, "6.7.0"
 set :repo_url, "git@git.toptal.com:widovic/project-boris-strelnikov.git"

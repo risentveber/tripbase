@@ -16,7 +16,7 @@ require "rails/test_unit/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module RunbaseApi
+module TripbaseApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
@@ -29,5 +29,12 @@ module RunbaseApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.action_mailer.delivery_method = :mailgun
+    config.default_host = 'www.subdomain.example.com'
+
+    config.action_mailer.mailgun_settings = {
+        api_key: Rails.application.secrets.mailgun_api_key,
+        domain: Rails.application.secrets.mailgun_domain
+    }
   end
 end

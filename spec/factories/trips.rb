@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :time_entry do
+  factory :trip do
     
   end
 end

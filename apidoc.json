@@ -1,9 +1,9 @@
 {
-  "name": "Runbase API",
+  "name": "Tripbase API",
   "version": "0.1.0",
-  "description": "Runbase site public API",
-  "title": "Runbase API",
-  "url" : "http://runbase.risentveber.ru/api",
+  "description": "Tripbase site public API",
+  "title": "Tripbase API",
+  "url" : "http://tripbase.risentveber.ru/api",
   "template" : {
     "withCompare" : false,
     "forceLanguage": "en"

@@ -21,19 +21,23 @@ ActiveRecord::Schema.define(version: 20170724171815) do
     t.index ["session_hash"], name: "index_sessions_on_session_hash", unique: true
   end
 
-  create_table "time_entries", force: :cascade do |t|
+  create_table "trips", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "duration"
-    t.integer "distance"
-    t.datetime "date"
+    t.text "comment"
+    t.string "destination"
+    t.datetime "start_date"
+    t.datetime "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_trips_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
+    t.string "confirmation_hash"
     t.string "email"
     t.string "password_digest"
+    t.boolean "confirmed", default: false
     t.integer "role", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

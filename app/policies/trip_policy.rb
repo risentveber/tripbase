@@ -1,5 +1,5 @@
-class TimeEntryPolicy
-  class Scope < TimeEntryPolicy
+class TripPolicy
+  class Scope < TripPolicy
     attr_reader :user, :scope
 
     def initialize(user, scope)

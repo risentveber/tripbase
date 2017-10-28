@@ -41,7 +41,7 @@ export default class App extends Component {
                         className={classnames('app-bar', { 'expanded': this.props.open })}
                         onLeftIconButtonTouchTap={this.props.onMenuToggl}
                         onTitleTouchTap={this.props.onTitleClick}
-                        title='RUNBASE'
+                        title='TRIPBASE'
                     />
                     <Drawer
                         docked

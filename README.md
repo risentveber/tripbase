@@ -1,3 +1,3 @@
 # README
 
-Runbase app - task for employment
+Tripbase app - task for employment

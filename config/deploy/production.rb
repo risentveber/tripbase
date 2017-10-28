@@ -7,7 +7,7 @@ set :stage, :production
 
 # server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
-server 'runbase.risentveber.ru', user: 'root', roles: %w{app web db}
+server 'tripbase.risentveber.ru', user: 'root', roles: %w{app web db}
 
 
 # role-based syntax
@@ -22,6 +22,6 @@ server 'runbase.risentveber.ru', user: 'root', roles: %w{app web db}
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
 
-role :app, %w{root@runbase.risentveber.ru}
-role :web, %w{root@runbase.risentveber.ru}
-role :db,  %w{root@runbase.risentveber.ru}
+role :app, %w{root@tripbase.risentveber.ru}
+role :web, %w{root@tripbase.risentveber.ru}
+role :db,  %w{root@tripbase.risentveber.ru}

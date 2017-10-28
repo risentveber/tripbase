@@ -16,6 +16,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+doc
 apidoc
 config/secrets.yml
 config/database.yml

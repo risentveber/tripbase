@@ -53,7 +53,8 @@ class Api::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      render json: @user
+      UserMailer.confirm_registration(@user).deliver_later
+      render json: @user, status: :created
     else
       render json: ::ErrorsSerializer.new(@user), status: :precondition_failed
     end
