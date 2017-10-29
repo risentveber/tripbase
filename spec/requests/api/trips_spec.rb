@@ -22,6 +22,8 @@ describe 'Trip' do
 
     post '/api/trips', headers: {'X-Session-Hash' => session.session_hash}, params: {
         trip: {
+            start_date: Time.now,
+            end_date: Time.now + 1.day,
             comment: 'testcomment',
             destination: 'testdestination'
         }
@@ -51,7 +53,7 @@ describe 'Trip' do
     expect(body.map{|x| x['user_id'] == user.id}.all?).to be true
   end
 
-  it 'Admin should see all trips' do
+  it 'Admin should see all trips for specified user' do
     user = create(:user)
     another_user = create(:another_user)
     admin_user = create(:admin_user)
@@ -61,10 +63,12 @@ describe 'Trip' do
     session = build(:session, user_id: admin_user.id)
     session.save validate: false
 
-    get '/api/trips', headers: { 'X-Session-Hash' => session.session_hash }
+    get '/api/trips',
+        headers: { 'X-Session-Hash' => session.session_hash },
+        params: { user_id: another_user.id }
 
     expect(response).to have_http_status(:ok)
     body = JSON.parse(response.body)
-    expect(body.length).to eq(6)
+    expect(body.length).to eq(3)
   end
 end

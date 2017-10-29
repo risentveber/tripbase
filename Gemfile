@@ -19,7 +19,7 @@ gem 'mailgun_rails'
 group :development, :test do
   gem 'rspec-rails'
   gem 'rspec'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'awesome_print'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
