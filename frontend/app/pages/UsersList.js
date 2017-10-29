@@ -81,8 +81,16 @@ export default class UsersList extends Component {
                         {this.props.list.map((row, index) => (
                             <TableRow key={index}>
                                 <TableRowColumn>
-                                    <DeleteIcon onClick={() => this.props.deleteUser(row)} />
-                                    <EditIcon onClick={() => this.props.selectUser(row)} />
+                                    <DeleteIcon
+                                        hoverColor='#0a0'
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => this.props.deleteUser(row)}
+                                    />
+                                    <EditIcon
+                                        hoverColor='#0a0'
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => this.props.selectUser(row)}
+                                    />
                                 </TableRowColumn>
                                 <TableRowColumn>{row.id}</TableRowColumn>
                                 <TableRowColumn>{row.name}</TableRowColumn>

@@ -8,6 +8,7 @@ import Confirmation from './pages/Confirmation';
 import TripsList from './pages/TripsList';
 import TripForm from './pages/TripForm';
 import UsersList from './pages/UsersList';
+import TravelPlan from './pages/TravelPlan';
 
 
 export default (
@@ -16,6 +17,7 @@ export default (
 		<Route exact path='/login/' component={Login} />
 		<Route exact path='/signup/' component={Signup} />
 		<Route exact path='/profile/' component={Profile} />
+		<Route exact path='/travel_plan/' component={TravelPlan} />
 		<Route exact path='/users/' component={UsersList} />
 		<Route exact path='/users/:userId/edit/' component={UsersList} />
 		<Route exact path='/trips/' component={TripsList} />

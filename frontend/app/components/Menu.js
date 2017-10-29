@@ -6,6 +6,7 @@ import ContentSend from 'material-ui/svg-icons/content/send';
 import ListIcon from 'material-ui/svg-icons/action/list';
 import ProfileIcon from 'material-ui/svg-icons/action/account-circle';
 import LogoutIcon from 'material-ui/svg-icons/action/exit-to-app';
+import AssessmentIcon from 'material-ui/svg-icons/action/assessment';
 import LoginIcon from 'material-ui/svg-icons/action/perm-identity';
 import AddIcon from 'material-ui/svg-icons/content/add-box';
 import { Subheader } from 'material-ui';
@@ -50,6 +51,9 @@ export default class Menu extends Component {
             </Link>}
             {(isAdmin || isManager) && <Link to='/users/'>
                 <ListItem primaryText='Users' leftIcon={<ListIcon />} />
+            </Link>}
+            {authentificated && <Link to='/travel_plan/'>
+                <ListItem primaryText='Travel plan' leftIcon={<AssessmentIcon />} />
             </Link>}
             {authentificated && <Link to='/trips/'>
                 <ListItem primaryText='Time entries' leftIcon={<ListIcon />} />
