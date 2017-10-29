@@ -23,11 +23,11 @@ import destroy from '../services/trips/destroy';
         onLoaded: list => dispatch(tripsLoaded(list)),
         selectTrip: trip => {
             dispatch(selectTrip(trip));
-            dispatch(push('/trips/edit/'));
+            dispatch(push(`/trips/${trip.id}/edit/`));
         },
         deleteTrip: trip => {
             if (confirm('Are you really want to delete time entry')) { // eslint-disable-line
-                destroy(trip).then(() => dispatch(tripDelete(trip)));
+                destroy(trip.id).then(() => dispatch(tripDelete(trip)));
             }
         }
     })
@@ -61,7 +61,7 @@ export default class TripsList extends Component {
                     height={'300px'}
                     fixedHeader
                 >
-                    <TableHeader displayRowCheckbox={false} displaySelectAll={false}>
+                    <TableHeader displayRowCheckbox={false} displaySelectAll={false} adjustForCheckbox={false}>
                         <TableRow>
                             <TableHeaderColumn colSpan='6' tooltip='Trips list' style={{ textAlign: 'center' }}>
                                 Trips list
@@ -73,7 +73,7 @@ export default class TripsList extends Component {
                             <TableHeaderColumn tooltip='The Start date'>Start date</TableHeaderColumn>
                             <TableHeaderColumn tooltip='The End date'>End date</TableHeaderColumn>
                             <TableHeaderColumn tooltip='The Destination'>Destination</TableHeaderColumn>
-                            <TableHeaderColumn tooltip='The Comment'>Comment</TableHeaderColumn>
+                            <TableHeaderColumn tooltip='The status'>Status</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
                     <TableBody
@@ -99,7 +99,7 @@ export default class TripsList extends Component {
                                 <TableRowColumn>{moment(row.start_date).format('MMM Do YY')}</TableRowColumn>
                                 <TableRowColumn>{moment(row.end_date).format('MMM Do YY')}</TableRowColumn>
                                 <TableRowColumn>{row.destination}</TableRowColumn>
-                                <TableRowColumn>{row.comment}</TableRowColumn>
+                                <TableRowColumn>{moment(row.start_date).startOf('day').fromNow()}</TableRowColumn>
                             </TableRow>
                         ))}
                     </TableBody>

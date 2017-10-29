@@ -11,22 +11,22 @@ import {
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import { connect } from 'react-redux';
-import { tripsLoaded, tripDelete, selectTrip } from '../actions/trips';
+import { usersLoaded, userDelete, selectUser } from '../actions/users';
 import load from '../services/users/list';
 import { push } from 'react-router-redux';
-import destroy from '../services/session/destroy';
+import destroy from '../services/users/destroy';
 
 @connect(
-    ({ timeEntries: { list } }) => ({ list }),
+    ({ users: { list } }) => ({ list }),
     dispatch => ({
-        onLoaded: list => dispatch(tripsLoaded(list)),
-        selectUser: timeEntry => {
-            dispatch(selectTrip(timeEntry));
-            dispatch(push('/times/edit/'));
+        onLoaded: list => dispatch(usersLoaded(list)),
+        selectUser: user => {
+            dispatch(selectUser(user));
+            dispatch(push(`/users/${user.id}/edit/`));
         },
-        deleteUser: timeEntry => {
-            if (confirm('Are you really want to delete time entry')) { // eslint-disable-line
-                destroy(timeEntry).then(() => dispatch(tripDelete(timeEntry)));
+        deleteUser: user => {
+            if (confirm('Are you really want to delete this user?')) { // eslint-disable-line
+                destroy(user.id).then(() => dispatch(userDelete(user)));
             }
         }
     })
@@ -57,12 +57,11 @@ export default class UsersList extends Component {
         return (
             <div>
                 <Table
-                    height={'300px'}
                     fixedHeader
                 >
-                    <TableHeader displayRowCheckbox={false} displaySelectAll={false}>
+                    <TableHeader displayRowCheckbox={false} displaySelectAll={false} adjustForCheckbox={false}>
                         <TableRow>
-                            <TableHeaderColumn colSpan='6' tooltip='Users list' style={{ textAlign: 'center' }}>
+                            <TableHeaderColumn colSpan='5' tooltip='Users list' style={{ textAlign: 'center' }}>
                                 Users list
                             </TableHeaderColumn>
                         </TableRow>

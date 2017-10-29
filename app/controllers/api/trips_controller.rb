@@ -28,7 +28,7 @@ class Api::TripsController < ApplicationController
   @apiSuccess {String} date Date of the jogging time
 =end
   def show
-    render json: @user
+    render json: @trip
   end
 
 =begin

@@ -3,6 +3,7 @@ FactoryGirl.define do
     email 'user@gmail.com'
     name 'User'
     password 'true_pass'
+    confirmed true
     password_confirmation 'true_pass'
   end
 
@@ -10,6 +11,7 @@ FactoryGirl.define do
     email 'another@gmail.com'
     name 'Another user'
     password 'true_pass'
+    confirmed true
     password_confirmation 'true_pass'
   end
 
@@ -18,6 +20,7 @@ FactoryGirl.define do
     name 'Admin'
     role 'admin'
     password 'true_pass'
+    confirmed true
     password_confirmation 'true_pass'
   end
 
@@ -26,6 +29,7 @@ FactoryGirl.define do
     name 'Manager'
     role 'manager'
     password 'true_pass'
+    confirmed true
     password_confirmation 'true_pass'
   end
 end

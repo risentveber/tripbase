@@ -7,14 +7,24 @@ import { push } from 'react-router-redux';
 import { tripCreated } from '../actions/trips';
 import createTrip from '../services/trips/create';
 import updatedTrip from '../services/trips/update';
+import getTrip from '../services/trips/show';
 import auth from '../decorators/auth';
-import { tripAttributeChanged } from '../actions/trips';
+import { tripAttributeChanged, selectTrip } from '../actions/trips';
+import { setBottomMessage } from '../actions/laoyut';
 
 const style = {
     marginLeft: 20,
 };
 
 const mapDispatchToProps = dispatch => ({
+    onTripLoad: trip => {
+        dispatch(selectTrip(trip));
+    },
+    onTripLoadFail: () => {
+        console.log('afsdfasfasdfasd');
+        dispatch(setBottomMessage('Not found'));
+        dispatch(push('/trips/'));
+    },
     onChangeAttribute: event => {
         dispatch(tripAttributeChanged(event.target.name, event.target.value));
     },
@@ -39,25 +49,35 @@ const mapStateToProps = ({ trips: { selected } }) => selected;
     mapStateToProps,
     mapDispatchToProps
 )
-export default class Login extends Component {
+export default class TripForm extends Component {
     static propTypes = {
         onChangeAttribute: PropTypes.func,
         onSingUpClick: PropTypes.func,
+        onTripLoadFail: PropTypes.func,
         onSubmit: PropTypes.func,
         disabled: PropTypes.bool,
-        start_date: PropTypes.string,
-        end_date: PropTypes.string,
+        start_date: PropTypes.object,
+        end_date: PropTypes.object,
         comment: PropTypes.string,
         destination: PropTypes.string,
-        errors: PropTypes.object
+        errors: PropTypes.object,
+        match: PropTypes.object,
+        onTripLoad: PropTypes.func
     };
 
     static contextTypes = {
         store: PropTypes.object
     };
 
+    componentDidMount() {
+        const { tripId }  = this.props.match.params;
+
+        if (tripId) {
+            getTrip(tripId).then(this.props.onTripLoad, this.props.onTripLoadFail);
+        }
+    }
+
     render() {
-        // console.log(this.props.start_date);
         const {
             onChangeAttribute,
             onSubmit,

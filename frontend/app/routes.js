@@ -17,9 +17,10 @@ export default (
 		<Route exact path='/signup/' component={Signup} />
 		<Route exact path='/profile/' component={Profile} />
 		<Route exact path='/users/' component={UsersList} />
+		<Route exact path='/users/:userId/edit/' component={UsersList} />
 		<Route exact path='/trips/' component={TripsList} />
 		<Route exact path='/trips/new/' component={TripForm} />
-		<Route exact path='/trips/edit/' component={TripForm} />
+		<Route exact path='/trips/:tripId/edit/' component={TripForm} />
 		<Route exact path='/confirmations/:confirmationId/' component={Confirmation}/>
 		<Redirect from='*' to='/login/'/>
 	</Switch>
