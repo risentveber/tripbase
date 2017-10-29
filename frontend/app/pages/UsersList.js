@@ -10,6 +10,7 @@ import {
 } from 'material-ui/Table';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import ListIcon from 'material-ui/svg-icons/action/list';
 import { connect } from 'react-redux';
 import { usersLoaded, userDelete, selectUser } from '../actions/users';
 import load from '../services/users/list';
@@ -17,9 +18,15 @@ import { push } from 'react-router-redux';
 import destroy from '../services/users/destroy';
 
 @connect(
-    ({ users: { list } }) => ({ list }),
+    ({
+         users: { list },
+         currentUser: { role }
+    }) => ({ list, isAdmin: role === 'admin' }),
     dispatch => ({
         onLoaded: list => dispatch(usersLoaded(list)),
+        showUserTrips: user => {
+            dispatch(push(`/users/${user.id}/trips/`));
+        },
         selectUser: user => {
             dispatch(selectUser(user));
             dispatch(push(`/users/${user.id}/edit/`));
@@ -35,6 +42,8 @@ export default class UsersList extends Component {
     static propTypes = {
         list: PropTypes.array,
         onLoaded: PropTypes.func,
+        showUserTrips: PropTypes.func,
+        isAdmin: PropTypes.bool,
         selectUser: PropTypes.func,
         deleteUser: PropTypes.func
     };
@@ -54,6 +63,7 @@ export default class UsersList extends Component {
     };
 
     render() {
+        const { isAdmin } = this.props;
         return (
             <div>
                 <Table
@@ -81,15 +91,20 @@ export default class UsersList extends Component {
                         {this.props.list.map((row, index) => (
                             <TableRow key={index}>
                                 <TableRowColumn>
-                                    <DeleteIcon
+                                    {isAdmin && <ListIcon
                                         hoverColor='#0a0'
                                         style={{ cursor: 'pointer' }}
-                                        onClick={() => this.props.deleteUser(row)}
-                                    />
+                                        onClick={() => this.props.showUserTrips(row)}
+                                    />}
                                     <EditIcon
                                         hoverColor='#0a0'
                                         style={{ cursor: 'pointer' }}
                                         onClick={() => this.props.selectUser(row)}
+                                    />
+                                    <DeleteIcon
+                                        hoverColor='#0a0'
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => this.props.deleteUser(row)}
                                     />
                                 </TableRowColumn>
                                 <TableRowColumn>{row.id}</TableRowColumn>

@@ -1,9 +1,15 @@
 import { getSessionHash } from '../sessionHash';
 
-export default id => fetch(`/api/users/${id}`, {
+export default userId => fetch(`/api/users/${userId}`, {
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'X-Session-Hash': getSessionHash()
     },
-}).then(response => response.json());
+}).then(response => {
+    if (response.ok) {
+        return response.json();
+    }
+
+    throw response.status;
+});

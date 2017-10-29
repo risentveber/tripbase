@@ -17,7 +17,7 @@ export default (state = defaultUsersState(), action) => {
     switch (action.type) {
         case USER_CREATED:
             return {
-                list: state.list.concat(action.trip),
+                list: state.list.concat(action.user),
                 selected: {
                     errors: {}
                 }
@@ -40,7 +40,7 @@ export default (state = defaultUsersState(), action) => {
             return {
                 list: state.list,
                 selected: {
-                    ...action.trip,
+                    ...action.user,
                     errors: {}
                 }
             };

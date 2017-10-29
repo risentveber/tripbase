@@ -35,13 +35,14 @@ import destroy from '../services/trips/destroy';
 export default class TripsList extends Component {
     static propTypes = {
         list: PropTypes.array,
+        match: PropTypes.object,
         onLoaded: PropTypes.func,
         selectTrip: PropTypes.func,
         deleteTrip: PropTypes.func
     };
 
     componentDidMount() {
-        load().then(data => this.props.onLoaded(data));
+        load(this.props.match.params.userId).then(data => this.props.onLoaded(data));
     }
 
     handleToggle = (event, toggled) => {

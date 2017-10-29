@@ -3,12 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import confirm from '../services/confirmation';
+import { setBottomMessage } from '../actions/laoyut';
 
 @connect(
     null,
     dispatch => ({
         confirmEmailByToken: confirmationId => {
-            confirm({ confirmationId }).then(() => dispatch(push('/login/')));
+            confirm({ confirmationId }).then(
+                () => dispatch(setBottomMessage('Successfully confirmed')),
+                () => dispatch(setBottomMessage('Confirmation error')),
+            ).then(() => dispatch(push('/login/')));
         },
     })
 )

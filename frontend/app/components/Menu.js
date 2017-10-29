@@ -56,7 +56,7 @@ export default class Menu extends Component {
                 <ListItem primaryText='Travel plan' leftIcon={<AssessmentIcon />} />
             </Link>}
             {authentificated && <Link to='/trips/'>
-                <ListItem primaryText='Time entries' leftIcon={<ListIcon />} />
+                <ListItem primaryText='My trips' leftIcon={<ListIcon />} />
             </Link>}
             {authentificated && <Link to='/trips/new/'>
                 <ListItem primaryText='Add time entry' leftIcon={<AddIcon />} />

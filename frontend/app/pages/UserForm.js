@@ -5,9 +5,12 @@ import PageContent from '../components/PageContent';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
-import { changeCurrentUserAttribute, userStartCreation } from '../actions/currentUser';
+import { changeUserAttribute, selectUser, userStartCreation } from '../actions/users';
 import createUser from '../services/users/create';
-
+import updateUser from '../services/users/update';
+import getUser from '../services/users/show';
+import { setBottomMessage } from '../actions/laoyut';
+import { athentificated } from '../actions/login';
 
 const style = {
     marginLeft: 20,
@@ -15,39 +18,76 @@ const style = {
 
 const mapDispatchToProps = dispatch => ({
     onChangeAttribute: event => {
-        dispatch(changeCurrentUserAttribute(event.target.name, event.target.value));
+        dispatch(changeUserAttribute(event.target.name, event.target.value));
+    },
+    onUserLoad: trip => {
+        dispatch(selectUser(trip));
+    },
+    onUserLoadFail: () => {
+        dispatch(setBottomMessage('Not found'));
+        dispatch(push('/'));
     },
     onSingUpClick: () => dispatch(push('/')),
-    onSubmit: ({ name, password, password_confirmation, email }) => {
-        dispatch(userStartCreation());
-        createUser({ name, password, password_confirmation, email })
-            .then(() => dispatch(push('/login/')))
-            .catch(errors => dispatch(changeCurrentUserAttribute('errors', errors)));
+    onSubmit: ({ id, name, password, password_confirmation, email, reloadCurrentUser }) => {
+        if (!id) {
+            dispatch(userStartCreation());
+        }
+        let promise;
+
+        if (id) {
+            promise = updateUser({ id, name, password, password_confirmation, email })
+                .then(() => {
+                    dispatch(push('/'));
+                    if (reloadCurrentUser) {
+                        dispatch(athentificated({ name, email }));
+                    }
+                });
+        } else {
+            promise = createUser({ id, name, password, password_confirmation, email })
+                .then(() => dispatch(push('/login/')));
+        }
+
+        promise.catch(errors => dispatch(changeUserAttribute('errors', errors)));
     }
 });
 
-const mapStateToProps = ({ currentUser }) => currentUser;
+const mapStateToProps = ({
+    users: { selected },
+    currentUser: { id }
+}) => ({ ...selected, reloadCurrentUser: id === selected.id });
 
 @connect(
     mapStateToProps,
     mapDispatchToProps
 )
-export default class Login extends Component {
+export default class UserForm extends Component {
     static propTypes = {
         onChangeAttribute: PropTypes.func,
         onSingUpClick: PropTypes.func,
+        onUserLoad: PropTypes.func,
+        onUserLoadFail: PropTypes.func,
         onSubmit: PropTypes.func,
         disabled: PropTypes.bool,
         email: PropTypes.string,
         name: PropTypes.string,
+        id: PropTypes.number,
         password: PropTypes.string,
         password_confirmation: PropTypes.string,
+        match: PropTypes.object,
         errors: PropTypes.object
     };
 
     static contextTypes = {
         store: PropTypes.object
     };
+
+    componentDidMount() {
+        const { userId }  = this.props.match.params;
+
+        if (userId) {
+            getUser(userId).then(this.props.onUserLoad, this.props.onUserLoadFail);
+        }
+    }
 
     render() {
         const {
@@ -58,11 +98,12 @@ export default class Login extends Component {
             password,
             errors,
             name,
+            id,
             password_confirmation: passwordConfirmation
         } = this.props;
 
         return <PageContent>
-            <h1>Welcome</h1>
+            <h1>{id ? 'Edit profile' : 'Welcome'}</h1>
             <TextField
                 hintText='Email'
                 onChange={onChangeAttribute}
@@ -102,16 +143,14 @@ export default class Login extends Component {
             />
             <br/>
             <RaisedButton
-                label='Continue'
+                label={id ? 'Update' : 'Continue'}
                 primary
                 onClick={() => onSubmit(this.props)}
                 disabled={disabled}
             />
-            <Link to='/login/'>
-                <RaisedButton
-                    label='Login'
-                />
-            </Link>
+            {!id && <Link to='/login/'>
+                <RaisedButton label='Login' />
+            </Link>}
         </PageContent>;
     }
 }

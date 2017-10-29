@@ -21,7 +21,6 @@ const mapDispatchToProps = dispatch => ({
         dispatch(selectTrip(trip));
     },
     onTripLoadFail: () => {
-        console.log('afsdfasfasdfasd');
         dispatch(setBottomMessage('Not found'));
         dispatch(push('/trips/'));
     },
@@ -38,7 +37,7 @@ const mapDispatchToProps = dispatch => ({
         }
 
         promise.then(() => dispatch(push('/trips/')))
-            .catch(errors => console.log(errors) || dispatch(tripAttributeChanged('errors', errors)));
+            .catch(errors => dispatch(tripAttributeChanged('errors', errors)));
     }
 });
 
