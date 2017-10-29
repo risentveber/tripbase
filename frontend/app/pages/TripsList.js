@@ -12,14 +12,25 @@ import {
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import { connect } from 'react-redux';
-import { tripsLoaded, tripDelete, selectTrip } from '../actions/trips';
+import { tripsLoaded, tripDelete, selectTrip, tripFilterUpdate } from '../actions/trips';
 import load from '../services/trips/load';
 import { push } from 'react-router-redux';
 import destroy from '../services/trips/destroy';
+import { TextField } from 'material-ui';
+
+const tripsVisualizer = list => list.map(trip => ({
+    ...trip,
+    status: moment(trip.start_date).startOf('day').fromNow(),
+    start_date: moment(trip.start_date).format('MMM Do YY'),
+    end_date: moment(trip.end_date).format('MMM Do YY')
+}));
+const searchableProperties = ['start_date', 'end_date', 'status', 'id', 'comment', 'destination'];
+const containValue = (trip, value) => searchableProperties.some(key => (String(trip[key] || '').toLowerCase()).includes(value));
 
 @connect(
-    ({ trips: { list } }) => ({ list }),
+    ({ trips: { list, filter } }) => ({ list: tripsVisualizer(list), filter }),
     dispatch => ({
+        onChangeFilterInput: event => dispatch(tripFilterUpdate(event.target.value)),
         onLoaded: list => dispatch(tripsLoaded(list)),
         selectTrip: trip => {
             dispatch(selectTrip(trip));
@@ -38,10 +49,13 @@ export default class TripsList extends Component {
         match: PropTypes.object,
         onLoaded: PropTypes.func,
         selectTrip: PropTypes.func,
-        deleteTrip: PropTypes.func
+        deleteTrip: PropTypes.func,
+        onChangeFilterInput: PropTypes.func,
+        filter: PropTypes.string
     };
 
     componentDidMount() {
+        this.props.onChangeFilterInput({ target: { value: '' } });
         load(this.props.match.params.userId).then(data => this.props.onLoaded(data));
     }
 
@@ -56,6 +70,7 @@ export default class TripsList extends Component {
     };
 
     render() {
+        const { filter } = this.props;
         return (
             <div>
                 <Table
@@ -64,8 +79,16 @@ export default class TripsList extends Component {
                 >
                     <TableHeader displayRowCheckbox={false} displaySelectAll={false} adjustForCheckbox={false}>
                         <TableRow>
-                            <TableHeaderColumn colSpan='6' tooltip='Trips list' style={{ textAlign: 'center' }}>
+                            <TableHeaderColumn colSpan='5' tooltip='Trips list' style={{ textAlign: 'center' }}>
                                 Trips list
+                            </TableHeaderColumn>
+                            <TableHeaderColumn colSpan='2' style={{ textAlign: 'center' }}>
+                                <TextField
+                                    hintText='Filter'
+                                    onChange={this.props.onChangeFilterInput}
+                                    name='filter'
+                                    value={filter}
+                                />
                             </TableHeaderColumn>
                         </TableRow>
                         <TableRow>
@@ -74,6 +97,7 @@ export default class TripsList extends Component {
                             <TableHeaderColumn tooltip='The Start date'>Start date</TableHeaderColumn>
                             <TableHeaderColumn tooltip='The End date'>End date</TableHeaderColumn>
                             <TableHeaderColumn tooltip='The Destination'>Destination</TableHeaderColumn>
+                            <TableHeaderColumn tooltip='The comment'>Comment</TableHeaderColumn>
                             <TableHeaderColumn tooltip='The status'>Status</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
@@ -82,7 +106,7 @@ export default class TripsList extends Component {
                         showRowHover
                         stripedRows
                     >
-                        {this.props.list.map((row, index) => (
+                        {this.props.list.filter(trip => !filter || containValue(trip, filter.toLowerCase())).map((row, index) => (
                             <TableRow key={index}>
                                 <TableRowColumn>
                                     <DeleteIcon
@@ -97,10 +121,11 @@ export default class TripsList extends Component {
                                     />
                                 </TableRowColumn>
                                 <TableRowColumn>{row.id}</TableRowColumn>
-                                <TableRowColumn>{moment(row.start_date).format('MMM Do YY')}</TableRowColumn>
-                                <TableRowColumn>{moment(row.end_date).format('MMM Do YY')}</TableRowColumn>
+                                <TableRowColumn>{row.start_date}</TableRowColumn>
+                                <TableRowColumn>{row.end_date}</TableRowColumn>
                                 <TableRowColumn>{row.destination}</TableRowColumn>
-                                <TableRowColumn>{moment(row.start_date).startOf('day').fromNow()}</TableRowColumn>
+                                <TableRowColumn>{row.comment}</TableRowColumn>
+                                <TableRowColumn>{row.status}</TableRowColumn>
                             </TableRow>
                         ))}
                     </TableBody>

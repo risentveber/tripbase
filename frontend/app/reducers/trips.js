@@ -3,11 +3,13 @@ import {
     TRIPS_LOADED,
     TRIP_SELECT,
     TRIP_DELETE,
-    TRIP_ATTRIBUTE_CHANGED
+    TRIP_ATTRIBUTE_CHANGED,
+    TRIP_FILTER_UPDATE
 } from '../actions/trips';
 
 const defaultLoginState = () => ({
     list: [],
+    filter: '',
     selected: {
         errors: {}
     }
@@ -15,6 +17,14 @@ const defaultLoginState = () => ({
 
 export default (state = defaultLoginState(), action) => {
     switch (action.type) {
+        case TRIP_FILTER_UPDATE:
+            return {
+                list: state.list,
+                filter: action.text,
+                selected: {
+                    errors: {}
+                }
+            };
         case TRIP_CREATED:
             return {
                 list: state.list.concat(action.trip),

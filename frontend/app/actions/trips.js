@@ -4,6 +4,7 @@ export const TRIP_UPDATE = 'TRIP_UPDATE';
 export const TRIP_DELETE = 'TRIP_DELETE';
 export const TRIPS_LOADED = 'TRIPS_LOADED';
 export const TRIP_SELECT = 'TRIP_SELECT';
+export const TRIP_FILTER_UPDATE = 'TRIP_FILTER_UPDATE';
 
 export const tripAttributeChanged = (attr, value) => ({
     type: TRIP_ATTRIBUTE_CHANGED,
@@ -14,6 +15,11 @@ export const tripAttributeChanged = (attr, value) => ({
 export const tripCreated = trip => ({
     type: TRIP_CREATED,
     trip
+});
+
+export const tripFilterUpdate = text => ({
+    type: TRIP_FILTER_UPDATE,
+    text
 });
 
 export const selectTrip = trip => ({
